@@ -1,7 +1,8 @@
 <?php
+// GN.03.home.php - Portal Dashboard
 session_start();
 
-// Çıkış yapma isteği kontrolü (Ayrı logout.php dosyasına gerek kalmaz)
+// Çıkış yapma isteği kontrolü
 if (isset($_GET['action']) && $_GET['action'] == 'logout') {
     session_unset();
     session_destroy();
@@ -11,7 +12,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'logout') {
 
 // Oturum açılmamışsa kullanıcıyı direkt login sayfasına yönlendir
 if (!isset($_SESSION['giris_yapildi']) || $_SESSION['giris_yapildi'] !== true) {
-    header("Location: login.php");
+    header("Location: GN.02.login.php");
     exit;
 }
 
@@ -19,6 +20,7 @@ $first_name = $_SESSION['first_name'] ?? 'User';
 $last_name = $_SESSION['last_name'] ?? '';
 $role = $_SESSION['role'] ?? 'Member';
 $email = $_SESSION['email'] ?? '';
+$is_admin = ($role === 'Admin');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -128,10 +130,23 @@ $email = $_SESSION['email'] ?? '';
             font-size: 1rem;
         }
 
-        /* Dashboard Grid */
+        /* Dashboard Layout Grid */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Admin active olduğunda grid yapısını 2 sütuna bölüyoruz */
+        @media (min-width: 900px) {
+            .dashboard-layout.has-admin {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
         }
 
@@ -175,6 +190,72 @@ $email = $_SESSION['email'] ?? '';
             line-height: 1.5;
         }
 
+        /* Stylish Admin Panel Sidebar Card */
+        .admin-sidebar-card {
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            border-radius: 16px;
+            padding: 1.75rem;
+            color: #ffffff;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #334155;
+        }
+
+        .admin-sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .admin-sidebar-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(132, 204, 22, 0.2);
+            color: #84cc16;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .admin-sidebar-card h3 {
+            color: #ffffff;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .admin-sidebar-card p {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-action-btn {
+            background: #84cc16;
+            color: #0f172a;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .admin-action-btn:hover {
+            background: #65a30d;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -191,11 +272,11 @@ $email = $_SESSION['email'] ?? '';
 
     <!-- Navbar -->
     <header class="navbar">
-        <a href="home.php" class="nav-brand">
+        <a href="GN.03.home.php" class="nav-brand">
             <span>dbs</span> Portal Dashboard
         </a>
-        <!-- Çıkış yapıldığında index.html'e yönlendiren bağlantı -->
-        <a href="home.php?action=logout" class="logout-btn">
+        <!-- Çıkış yapıldığında index.html'e yönlendiren doğru bağlantı -->
+        <a href="GN.03.home.php?action=logout" class="logout-btn">
             <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
         </a>
     </header>
@@ -207,30 +288,54 @@ $email = $_SESSION['email'] ?? '';
             <p>Role: <strong><?php echo htmlspecialchars($role); ?></strong> &bull; Email: <?php echo htmlspecialchars($email); ?></p>
         </div>
 
-        <div class="grid">
-            <div class="card">
-                <div class="card-icon">
-                    <i class="fa-solid fa-folder-open"></i>
+        <!-- Dashboard Layout: Admin ise sağda panel açılır, değilse sadece grid görünür -->
+        <div class="dashboard-layout <?php echo $is_admin ? 'has-admin' : ''; ?>">
+            
+            <!-- Sol / Ana Modüller Grid -->
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fa-solid fa-folder-open"></i>
+                    </div>
+                    <h3>Projects</h3>
+                    <p>Manage active construction projects, schedules, and documentation workflows.</p>
                 </div>
-                <h3>Projects</h3>
-                <p>Manage active construction projects, schedules, and documentation workflows.</p>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fa-solid fa-users-gear"></i>
+                    </div>
+                    <h3>Team Management</h3>
+                    <p>View site personnel, subcontractors, and task delegation matrices.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3>Reports & Progress</h3>
+                    <p>Access analytical summaries, change orders, and financial overviews.</p>
+                </div>
             </div>
 
-            <div class="card">
-                <div class="card-icon">
-                    <i class="fa-solid fa-users-gear"></i>
+            <!-- Sağ Taraf: Sadece Adminler İçin Stylish Admin Panel Kartı -->
+            <?php if ($is_admin): ?>
+                <div class="admin-sidebar-card">
+                    <div>
+                        <div class="admin-sidebar-header">
+                            <div class="admin-sidebar-icon">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <h3>Admin Panel</h3>
+                        </div>
+                        <p>Manage portal accounts, user access roles, permissions, and system security credentials.</p>
+                    </div>
+                    <a href="GN.04.usersPage.php" class="admin-action-btn">
+                        <i class="fa-solid fa-users-cog"></i> Manage Users
+                    </a>
                 </div>
-                <h3>Team Management</h3>
-                <p>View site personnel, subcontractors, and task delegation matrices.</p>
-            </div>
+            <?php endif; ?>
 
-            <div class="card">
-                <div class="card-icon">
-                    <i class="fa-solid fa-chart-line"></i>
-                </div>
-                <h3>Reports & Progress</h3>
-                <p>Access analytical summaries, change orders, and financial overviews.</p>
-            </div>
         </div>
     </main>
 
