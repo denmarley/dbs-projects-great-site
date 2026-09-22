@@ -19,6 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($row = $result->fetch_assoc()) {
             // Verify hashed password
             if (password_verify($password, $row['password'])) {
+                
+                // --- SON GİRİŞ TARİHİNİ GÜNCELLEME KODU ---
+                $update_stmt = $conn->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
+                $update_stmt->bind_param("i", $row['id']);
+                $update_stmt->execute();
+                $update_stmt->close();
+                // -------------------------------------------
+
                 $_SESSION['giris_yapildi'] = true;
                 $_SESSION['user_id'] = $row['id'];
                 $_SESSION['first_name'] = $row['first_name'];

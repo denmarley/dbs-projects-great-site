@@ -157,11 +157,15 @@ $is_admin = ($role === 'Admin');
             padding: 1.5rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
             transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            display: block;
+            color: inherit;
         }
 
         .card:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            border-color: #cbd5e1;
         }
 
         .card-icon {
@@ -293,13 +297,14 @@ $is_admin = ($role === 'Admin');
             
             <!-- Sol / Ana Modüller Grid -->
             <div class="grid">
-                <div class="card">
+                <!-- Projects Kartı - Doğrudan PR.01.projects.php sayfasına yönlendirildi -->
+                <a href="PR.01.projects.php" class="card">
                     <div class="card-icon">
                         <i class="fa-solid fa-folder-open"></i>
                     </div>
                     <h3>Projects</h3>
                     <p>Manage active construction projects, schedules, and documentation workflows.</p>
-                </div>
+                </a>
 
                 <div class="card">
                     <div class="card-icon">
