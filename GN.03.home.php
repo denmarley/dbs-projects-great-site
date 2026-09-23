@@ -306,6 +306,7 @@ $is_admin = ($role === 'Admin');
                     <p>Manage active construction projects, schedules, and documentation workflows.</p>
                 </a>
 
+                <!-- Team Management Kartı -->
                 <div class="card">
                     <div class="card-icon">
                         <i class="fa-solid fa-users-gear"></i>
@@ -314,6 +315,16 @@ $is_admin = ($role === 'Admin');
                     <p>View site personnel, subcontractors, and task delegation matrices.</p>
                 </div>
 
+                <!-- Document Management Kartı -->
+                <div class="card" onclick="window.location.href='DC.01.documents.php'" style="cursor: pointer;">
+                    <div class="card-icon">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <h3>Document Management</h3>
+                    <p>Access, review, and manage all project documents, revisions, and metadata repositories.</p>
+                </div>
+
+                <!-- Reports & Progress Kartı -->
                 <div class="card">
                     <div class="card-icon">
                         <i class="fa-solid fa-chart-line"></i>
