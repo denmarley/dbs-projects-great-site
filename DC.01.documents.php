@@ -117,16 +117,7 @@ if ($projects_result) {
 <body>
 
     <!-- Üst Başlık Alanı -->
-    <div class="portal-header">
-        <div class="d-flex align-items-center">
-            <span class="portal-logo me-3">dbs</span>
-            <h5 class="mb-0 text-dark fw-semibold">Document Management Portal</h5>
-        </div>
-        <div>
-            <a href="GN.03.home.php" class="btn btn-outline-secondary btn-sm me-2"><i class="fas fa-home me-1"></i> Home</a>
-            <a href="GN.02.login.php?logout=true" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
-        </div>
-    </div>
+    <?php include 'AA.00.header.php'; ?>
 
     <!-- Ana İçerik -->
     <div class="container main-container py-4">
